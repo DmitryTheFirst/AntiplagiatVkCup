@@ -14,6 +14,7 @@ namespace Antiplagiat
 			String[] filePathes = IO.ReadInput("input.txt");
 			SourceFile[] files = new SourceFile[filePathes.Length];
 			InitFiles(files, filePathes);
+			 
 
 
 			String[][] result = new String[2][];
