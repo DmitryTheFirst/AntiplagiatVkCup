@@ -14,6 +14,7 @@ namespace Antiplagiat
 		JAVA,
 		CSHARP,
 		PYTHON,
+
 		PASCAL,
 		UNKNOWN
 	}
