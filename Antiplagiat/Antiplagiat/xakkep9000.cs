@@ -30,6 +30,7 @@ namespace Antiplagiat
             this.content = content;
         }
 
+        //rm cpp c cs java
         private void RemoveShitCPLUSPLUS()
         {
 
