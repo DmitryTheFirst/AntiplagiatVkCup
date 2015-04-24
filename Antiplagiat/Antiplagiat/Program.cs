@@ -16,12 +16,5 @@ namespace Antiplagiat
 	}
 
 
-	static class IO
-	{
-		static public String[] ReadFile(String path)
-		{
-			StreamReader sr = new StreamReader(path);
-			return null;
-		}
-	}
+	
 }
