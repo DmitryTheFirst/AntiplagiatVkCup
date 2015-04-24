@@ -14,7 +14,6 @@ namespace Antiplagiat
 		JAVA,
 		CSHARP,
 		PYTHON,
-
 		PASCAL,
 		UNKNOWN
 	}
@@ -32,9 +31,6 @@ namespace Antiplagiat
 			this.content = content;
 		}
 
-        //rm cpp c cs java
-        private void RemoveShitCPLUSPLUS()
-        {
 		//rm cpp c cs java
 		private void RemoveShitCPLUSPLUS()
 		{
