@@ -1,0 +1,6 @@
+C:\Users\Smirnyaga\GoogleDrive\code\C#\Antiplagiat\Antiplagiat\Antiplagiat\bin\Debug\Antiplagiat.exe.config
+C:\Users\Smirnyaga\GoogleDrive\code\C#\Antiplagiat\Antiplagiat\Antiplagiat\bin\Debug\Antiplagiat.exe
+C:\Users\Smirnyaga\GoogleDrive\code\C#\Antiplagiat\Antiplagiat\Antiplagiat\bin\Debug\Antiplagiat.pdb
+C:\Users\Smirnyaga\GoogleDrive\code\C#\Antiplagiat\Antiplagiat\Antiplagiat\obj\Debug\Antiplagiat.csprojResolveAssemblyReference.cache
+C:\Users\Smirnyaga\GoogleDrive\code\C#\Antiplagiat\Antiplagiat\Antiplagiat\obj\Debug\Antiplagiat.exe
+C:\Users\Smirnyaga\GoogleDrive\code\C#\Antiplagiat\Antiplagiat\Antiplagiat\obj\Debug\Antiplagiat.pdb
