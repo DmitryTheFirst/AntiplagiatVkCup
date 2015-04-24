@@ -11,10 +11,13 @@ namespace Antiplagiat
 	{
 		static void Main(string[] args)
 		{
-
+			String[] files = IO.ReadInput("input.txt");
+			
 		}
+
+		
 	}
 
 
-	
+
 }
