@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Antiplagiat
@@ -33,7 +34,9 @@ namespace Antiplagiat
         //rm cpp c cs java
         private void RemoveShitCPLUSPLUS()
         {
-
+            //remove comments
+            var regex = new Regex("/\\*[^*]*\\*+([^/*][^*]*\\*+)*/|(\"(\\\\.|[^\"\\\\])*\"|\'(\\\\.|[^\'\\\\])*\'|.[^/\"\'\\\\]*)");
+            content = regex.Replace(content, "");
         }
 
         public void removeShit()
