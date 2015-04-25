@@ -11,13 +11,6 @@ namespace Antiplagiat
 	{
 		static void Main(string[] args)
 		{
-            String[] filePathes = IO.ReadInput("input.txt");
-            var filePath = @"C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\xakkep9000_test.py";
-            var f = new SourceFile(DetectLanguage(filePath), IO.ReadFile(filePath));
-            f.removeShit();
-            var text = f.ToString();
-            return;
-			/*
 			String[] filePathes = IO.ReadInput("input.txt");
 			SourceFile[] files = new SourceFile[filePathes.Length];
 			InitFiles(files, filePathes);
@@ -31,9 +24,8 @@ namespace Antiplagiat
 				cmp.AddSrcFile(file);
 			}
 
-			//String[][] result = new String[2][];
-			//IO.WriteOutput(result, "output.txt");
-             * */
+
+			IO.WriteOutput(cmp.GetCheatersGroups(), "output.txt");
 		}
 
 		static void InitFiles(SourceFile[] files, String[] filePathes)
@@ -41,7 +33,7 @@ namespace Antiplagiat
 			for (int i = 0; i < files.Length; i++)
 			{
 				String filePath = filePathes[i];
-				files[i] = new SourceFile(DetectLanguage(filePath), IO.ReadFile(filePath));
+				files[i] = new SourceFile(DetectLanguage(filePath), IO.ReadFile(filePath), filePath);
 			}
 		}
 
@@ -78,6 +70,11 @@ namespace Antiplagiat
 
 		private List<Group> groups = new List<Group>();
 
+
+		public Group[] GetCheatersGroups()
+		{
+			return groups.Where(a => a.files.Count > 1).ToArray();
+		}
 		public void AddSrcFile(SourceFile src)
 		{
 			bool added = false;
@@ -91,6 +88,8 @@ namespace Antiplagiat
 						{
 							//add to group
 							group.AddFile(src);
+							added = true;
+							break;
 						}
 					}
 				}
@@ -98,6 +97,7 @@ namespace Antiplagiat
 			if (!added)
 			{
 				Group newGroup = new Group(src);
+				newGroup.AddFile(src);
 				groups.Add(newGroup);
 			}
 		}
@@ -191,26 +191,26 @@ namespace Antiplagiat
 			return res;
 		}
 
-		static public void WriteOutput(String[][] res, String path)
+		static public void WriteOutput(Group[] res, String path)
 		{
 			StreamWriter sw = new StreamWriter(path);
 			sw.WriteLine(res.Length);
 			for (int i = 0; i < res.Length; i++)
 			{
-				sw.WriteLine(ConcatArr(res[i]));
+				sw.WriteLine(ConcatArr(res[i].files));
 			}
 			sw.Close();
 		}
 
-		static private String ConcatArr(String[] arr)
+		static private String ConcatArr(List<SourceFile> arr)
 		{
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < arr.Length - 1; i++)
+			foreach (var sourceFile in arr)
 			{
-				sb.Append(arr[i] + " ");
+				sb.Append(sourceFile + " ");
 			}
-			sb.Append(arr[arr.Length - 1]);
-			return sb.ToString();
+
+			return sb.ToString().TrimEnd();
 		}
 
 	}
