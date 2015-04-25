@@ -733,6 +733,20 @@ namespace Antiplagiat
             content = r.Replace(content, "");
             //
 
+            List<string> kw = new List<string> {"alignas","alignof","and","and_eq","asm","bitand","bitor","break",
+                                                "case","catch","class","compl","constexpr","const_cast","continue","decltype",
+                                                "default","delete","do","dynamic_cast","else","enum","explicit","export",
+                                                "extern","false","for","friend","goto","if","mutable","namespace",
+                                                "new","noexcept","not","not_eq","nullptr","operator","or","or_eq",
+                                                "register","reinterpret_cast","return","sizeof","static","static_assert",
+                                                "static_cast","struct","switch","this","thread_local","throw","true","try",
+                                                "typedef","typeid","typename","union","unsigned","using(1)","virtual","void",
+                                                "volatile","while","xor","xor_eq"};
+            List<string> t = new List<string> { "wchar_t", "char", "char16_t", "char32_t", "bool", "float", "double", "int", "long", "short", "auto" };
+            List<string> rm = new List<string> { "protected","public","const", "inline", "private", "signed", "template" };
+
+            FinalRm(kw, t, rm);
+
             RemoveEmptyStrings();
         }
 
@@ -882,6 +896,35 @@ namespace Antiplagiat
                         pos++;
                     }
                     content = content.Remove(start + 1, pos - start - 1).Insert(start + 1, replaced);
+                }
+            }
+        }
+
+        private void FinalRm(List<string>key_word, List<string>type_names, List<string>remove)
+        {
+            int start = 0;
+            Regex f = new Regex(@"[^_a-zA-Z0-9]");
+            while(f.IsMatch(content, start))
+            {
+                var match = f.Match(content, start);
+                start = content.IndexOf(match.ToString());
+                if (key_word.Contains(match.ToString()))
+                {//skip
+                    start += match.Length;
+                }
+                else if (type_names.Contains(match.ToString()))
+                {// "tt"
+                    content = content.Remove(start, match.Length).Insert(start, "tt");
+                    start += 2;
+                }
+                else if (remove.Contains(match.ToString()))
+                {//""
+                    content = content.Remove(start, match.Length);
+                }
+                else
+                {//"xx"
+                    content = content.Remove(start, match.Length).Insert(start, "xx");
+                    start += 2;
                 }
             }
         }
