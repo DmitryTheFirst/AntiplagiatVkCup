@@ -14,20 +14,12 @@ namespace Antiplagiat
 			String[] filePathes = IO.ReadInput("input.txt");
 			SourceFile[] files = new SourceFile[filePathes.Length];
 			InitFiles(files, filePathes);
-			 
+
+
+
 
 
 			String[][] result = new String[2][];
-			result[0] = new String[]
-			{
-				"49_38a.cpp", "t61_31.cpp"
-			};
-
-			result[1] = new String[]
-			{
-				"91_a1.cpp", "9l_3_2dEd.cpp"
-			};
-
 			IO.WriteOutput(result, "output.txt");
 		}
 
@@ -64,6 +56,43 @@ namespace Antiplagiat
 
 
 
+	}
+
+
+	class Comparer
+	{
+		private SourceFile[] sortedFiles;
+
+		private const double Threshold = 0.1;
+
+
+		public Comparer(SourceFile[] files)
+		{
+			sortedFiles = files.OrderBy(a => a.ToString().Length).ToArray();
+		}
+
+		public static int LevenshteinDistance(string string1, string string2)
+		{
+			if (string1 == null) throw new ArgumentNullException("string1");
+			if (string2 == null) throw new ArgumentNullException("string2");
+			int diff;
+			int[,] m = new int[string1.Length + 1, string2.Length + 1];
+
+			for (int i = 0; i <= string1.Length; i++) m[i, 0] = i;
+			for (int j = 0; j <= string2.Length; j++) m[0, j] = j;
+
+			for (int i = 1; i <= string1.Length; i++)
+				for (int j = 1; j <= string2.Length; j++)
+				{
+					diff = (string1[i - 1] == string2[j - 1]) ? 0 : 1;
+
+					m[i, j] = Math.Min(Math.Min(m[i - 1, j] + 1,
+											 m[i, j - 1] + 1),
+											 m[i - 1, j - 1] + diff);
+				}
+
+			return m[string1.Length, string2.Length];
+		}
 	}
 
 
@@ -121,7 +150,7 @@ namespace Antiplagiat
 	#endregion
 
 
-	
+
 	#endregion
 
 
