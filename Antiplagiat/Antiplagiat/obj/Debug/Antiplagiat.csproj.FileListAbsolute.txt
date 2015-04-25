@@ -7,3 +7,6 @@ C:\Users\Smirnyaga\GoogleDrive\code\C#\Antiplagiat\Antiplagiat\Antiplagiat\obj\D
 C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\bin\Debug\Antiplagiat.exe.config
 C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\obj\Debug\Antiplagiat.exe
 C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\obj\Debug\Antiplagiat.pdb
+C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\obj\Debug\Antiplagiat.csprojResolveAssemblyReference.cache
+C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\bin\Debug\Antiplagiat.exe
+C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\bin\Debug\Antiplagiat.pdb
