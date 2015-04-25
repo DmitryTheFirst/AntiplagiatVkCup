@@ -749,5 +749,10 @@ namespace Antiplagiat
 					break;
 			}
 		}
+
+        string ToString()
+        {
+            return content;
+        }
 	}
 }
