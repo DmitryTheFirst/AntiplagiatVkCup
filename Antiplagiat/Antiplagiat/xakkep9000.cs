@@ -20,15 +20,17 @@ namespace Antiplagiat
 
 	public class SourceFile
 	{
+        public string path { private set; get; }
 		public Language lagnguage { private set; get; }
 		public string content { private set; get; }
 
 		public SourceFile() { }
 
-		public SourceFile(Language language, string content)
+		public SourceFile(Language language, string content, string path)
 		{
 			this.lagnguage = language;
 			this.content = content;
+            this.path = path;
 		}
 
 		//cpp c java
@@ -724,6 +726,9 @@ namespace Antiplagiat
 
             //replace 4spaces on tabs
             _4spacesToTabPYTHON();
+
+            //make blocks
+            MakeBlocksPYTHON();
         }
 
         private void _4spacesToTabPYTHON()
@@ -748,9 +753,18 @@ namespace Antiplagiat
             content = r.Replace(content, "\n");
         }
 
-        private void MakeBlockdPYTHON()
+        private void MakeBlocksPYTHON()
         {
-
+            Regex r = new Regex(@"((\n\t[^\n]+)+)");
+            string old = null;
+            do
+            {
+                old = content;
+                content = r.Replace(content, new MatchEvaluator(m =>
+                {
+                    return "\n{" + m.Groups[1].ToString().Replace("\n\t", "\n") + "\n}";
+                }));
+            } while (old != content);
         }
 
 		public void removeShit()
