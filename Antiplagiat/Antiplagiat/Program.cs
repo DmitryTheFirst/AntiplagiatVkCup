@@ -33,7 +33,7 @@ namespace Antiplagiat
 			for (int i = 0; i < files.Length; i++)
 			{
 				String filePath = filePathes[i];
-				files[i] = new SourceFile(DetectLanguage(filePath), IO.ReadFile(filePath));
+				files[i] = new SourceFile(DetectLanguage(filePath), IO.ReadFile(filePath), filePath);
 			}
 		}
 
