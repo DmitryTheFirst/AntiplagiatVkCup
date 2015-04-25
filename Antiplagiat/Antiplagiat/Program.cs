@@ -11,7 +11,12 @@ namespace Antiplagiat
 	{
 		static void Main(string[] args)
 		{
-			String[] filePathes = IO.ReadInput("input.txt");
+            var filePath = @"C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\xakkep9000_test.py";
+            var f = new SourceFile(DetectLanguage(filePath), IO.ReadFile(filePath));
+            f.removeShit();
+            var text = f.ToString();
+            return;
+			/*String[] filePathes = IO.ReadInput("input.txt");
 			SourceFile[] files = new SourceFile[filePathes.Length];
 			InitFiles(files, filePathes);
 
@@ -20,7 +25,7 @@ namespace Antiplagiat
 
 
 			String[][] result = new String[2][];
-			IO.WriteOutput(result, "output.txt");
+			IO.WriteOutput(result, "output.txt");*/
 		}
 
 		static void InitFiles(SourceFile[] files, String[] filePathes)

@@ -1,4 +1,4 @@
-"""cl"""a"s"s Entity(dict):                                 # наследуем класс от __builtin__.dict
+class Entity(dict):                                 # наследуем класс от __builtin__.dict
     def __getattr__(self, key):                     # этот метод будет вызван, если атрибут
                                                     # с именем key не будет найден у экземпляра класса
         try: 
@@ -14,12 +14,12 @@
     def __delatt"""r__(se#l#f#, key):\"""'"'"''""'                     # а этот """#при удалении атрибута 
         try:                                        # с помощью del mydict.g
             del self[key]
-# """       except KeyError, k: 
+            except KeyError, k: 
             raise AttributeError, k
- #"""
-    """def __repr__(self):                             # используется функцией repr 
+    #"""
+    def __repr__(self):                             # используется функцией repr 
         return self.__class__.__name__ + "(" + dict.__repr__(self) + ")"
- """
+
 d = Entity(a=1)
-d.b_100 = 10#0
+d.b_100 = 10                                        #0
 assert d.a == d['a'] and d.b_100 == d['b_100']

@@ -719,10 +719,39 @@ namespace Antiplagiat
         {
             //remove comments
             RemoveCommentPYTHON();
+
+            RemoveEmptyStrings();
+
+            //replace 4spaces on tabs
+            _4spacesToTabPYTHON();
+        }
+
+        private void _4spacesToTabPYTHON()
+        {
+            Regex r = new Regex(@"\n(\t*)(    )");
+            string old = null;
+            do
+            {
+                old = content;
+                content = r.Replace(content, new MatchEvaluator(m =>
+                {
+                    return "\n" + m.Groups[1] + "\t";
+                }));
+            } while (old != content);
+        }
+
+        private void RemoveEmptyStrings()
+        {
+            Regex r = new Regex(@"\n\s*\n");
+            content = r.Replace(content, "\n");
+            r = new Regex(@"\n\n+");
+            content = r.Replace(content, "\n");
         }
 
 		public void removeShit()
 		{
+            //erase return carrier
+            content = content.Replace("\r", "");
 			switch (lagnguage)
 			{
 				case Language.CPLUSPLUS:
@@ -750,7 +779,7 @@ namespace Antiplagiat
 			}
 		}
 
-        string ToString()
+        public override string ToString() 
         {
             return content;
         }
