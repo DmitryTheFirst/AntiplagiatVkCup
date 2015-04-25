@@ -911,10 +911,16 @@ namespace Antiplagiat
                     RemoveShitPASCAL();
 					break;
 				case Language.UNKNOWN:
+                    RemoveEmptyStrings();
 					break;
 				default:
 					break;
 			}
+            if (lagnguage != Language.UNKNOWN)
+            {
+                Regex r = new Regex("(?:[^0-9a-zA-Z_])[0-9][_a-zA-Z0-9]*");
+                content = r.Replace(content, "n");
+            }
 		}
 
         public override string ToString() 
