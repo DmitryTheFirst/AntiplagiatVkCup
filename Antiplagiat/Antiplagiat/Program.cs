@@ -11,21 +11,29 @@ namespace Antiplagiat
 	{
 		static void Main(string[] args)
 		{
+            String[] filePathes = IO.ReadInput("input.txt");
             var filePath = @"C:\Users\Admin_x64\Desktop\codeforces\AntiplagiatVkCup\Antiplagiat\Antiplagiat\xakkep9000_test.py";
             var f = new SourceFile(DetectLanguage(filePath), IO.ReadFile(filePath));
             f.removeShit();
             var text = f.ToString();
             return;
-			/*String[] filePathes = IO.ReadInput("input.txt");
+			/*
+			String[] filePathes = IO.ReadInput("input.txt");
 			SourceFile[] files = new SourceFile[filePathes.Length];
 			InitFiles(files, filePathes);
 
+			IOrderedEnumerable<SourceFile> orderedFiles = files.OrderBy(a => a.ToString().Length);
 
+			Comparer cmp = new Comparer();
 
+			foreach (var file in orderedFiles)
+			{
+				cmp.AddSrcFile(file);
+			}
 
-
-			String[][] result = new String[2][];
-			IO.WriteOutput(result, "output.txt");*/
+			//String[][] result = new String[2][];
+			//IO.WriteOutput(result, "output.txt");
+             * */
 		}
 
 		static void InitFiles(SourceFile[] files, String[] filePathes)
@@ -68,43 +76,33 @@ namespace Antiplagiat
 	{
 		private const double Threshold = 0.1;
 
-		private bool[,] matrix;
+		private List<Group> groups = new List<Group>();
 
-		private SourceFile[] srcs;
-
-		public Comparer(SourceFile[] srcs)
+		public void AddSrcFile(SourceFile src)
 		{
-			this.srcs = srcs;
-			matrix = new bool[srcs.Length, srcs.Length];
-
-			for (int i = 0; i < srcs.Length; i++)
+			bool added = false;
+			foreach (var group in groups)
 			{
-				for (int j = 0; j < srcs.Length; j++)
+				foreach (var file in group.files)
 				{
-					if (i < j)
+					if (Normalizer(src.ToString().Length, file.ToString().Length) <= Threshold)
 					{
-						if (Normalizer(srcs[i].ToString().Length, srcs[i].ToString().Length) <= Threshold)
+						if (Equals(src.ToString(), file.ToString()))
 						{
-							//real check
-							double dist = LevenshteinDistance(srcs[i].ToString(), srcs[j].ToString());
-							// System.out.println(String.format("[ %s ]  ----  [ %s ]  Result: %s", inputSrcs[i].path, inputSrcs[j].path, dist));
-							if (dist <= Threshold)
-							{
-								matrix[i, j] = matrix[j, i] = true;
-							}
+							//add to group
+							group.AddFile(src);
 						}
 					}
 				}
 			}
-			CreateGroupsFromMatrix();
+			if (!added)
+			{
+				Group newGroup = new Group(src);
+				groups.Add(newGroup);
+			}
 		}
 
 
-		void CreateGroupsFromMatrix()
-		{
-			int vNum = srcs.Length;
-
-		}
 
 		double Normalizer(int length1, int length2)
 		{
@@ -134,9 +132,37 @@ namespace Antiplagiat
 
 			return m[string1.Length, string2.Length];
 		}
+
+		public static bool Equals(String str1, String str2)
+		{
+			int maxLength = Math.Max(str1.Length, str2.Length);
+			return LevenshteinDistance(str1, str2) / ((double)maxLength) < Threshold;
+		}
+
+
+
 	}
 
+	class Group
+	{
+		public double averageLength;
+		public List<SourceFile> files;
 
+
+		public Group(SourceFile initSourceFile)
+		{
+			int initLength = initSourceFile.ToString().Length;
+			files = new List<SourceFile>();
+			averageLength = initLength;
+		}
+
+		public void AddFile(SourceFile file)
+		{
+			int newLength = file.ToString().Length;
+			averageLength = ((averageLength * files.Count) + newLength) / (files.Count + 1);
+			files.Add(file);
+		}
+	}
 
 
 

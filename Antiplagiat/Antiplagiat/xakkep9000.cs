@@ -748,6 +748,11 @@ namespace Antiplagiat
             content = r.Replace(content, "\n");
         }
 
+        private void MakeBlockdPYTHON()
+        {
+
+        }
+
 		public void removeShit()
 		{
             //erase return carrier
