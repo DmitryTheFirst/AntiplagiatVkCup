@@ -49,6 +49,7 @@ namespace Antiplagiat
             Action<char?> updPrev = chr => { prev = chr; };
             Action<int> updState = st => { state = st; };
             Action step = () => { if (prev.HasValue) put(prev.Value); updPrev(current); };
+            Action steps = () => { if (prev.HasValue) put('s'); updPrev(current); };
             Action finite_state_machine_body = () =>
             {
                 switch (state)
@@ -113,11 +114,12 @@ namespace Antiplagiat
                                 if (!prev.HasValue || prev != '\\')
                                 {
                                     updState(0);
-                                    step();
+                                    steps();
+                                    updPrev(null);
                                 }
                                 break;
                             default:
-                                step();
+                                steps();
                                 break;
                         }
                         #endregion
@@ -183,6 +185,7 @@ namespace Antiplagiat
             Action<char?> updPrev = chr => { prev = chr; };
             Action<int> updState = st => { state = st; };
             Action step = () => { if (prev.HasValue) put(prev.Value); updPrev(current); };
+            Action steps = () => { if (prev.HasValue) put('s'); updPrev(current); };
             Action finite_state_machine_body = () =>
             {
                 switch (state)
@@ -201,7 +204,7 @@ namespace Antiplagiat
                                 else if (prev.HasValue && prev == '@')
                                 {
                                     updState(4);
-                                    step();
+                                    steps();
                                 }
                                 break;
                             case '*':
@@ -255,11 +258,12 @@ namespace Antiplagiat
                                 if (!prev.HasValue || prev != '\\')
                                 {
                                     updState(0);
-                                    step();
+                                    steps();
+                                    updPrev(null);
                                 }
                                 break;
                             default:
-                                step();
+                                steps();
                                 break;
                         }
                         #endregion
@@ -291,10 +295,11 @@ namespace Antiplagiat
                         {
                             case '"':
                                 updState(0);
-                                step();
+                                steps();
+                                updPrev(null);
                                 break;
                             default:
-                                step();
+                                steps();
                                 break;
                         }
                         #endregion
@@ -341,6 +346,7 @@ namespace Antiplagiat
             Action<char?> updPrev = chr => { prev = chr; };
             Action<int> updState = st => { state = st; };
             Action step = () => { if (prev.HasValue) put(prev.Value); updPrev(current); };
+            Action steps = () => { if (prev.HasValue) put('s'); updPrev(current); };
             Action finite_state_machine_body = () =>
             {
                 switch (state)
@@ -408,10 +414,11 @@ namespace Antiplagiat
                         {
                             case '\'':
                                 updState(0);
-                                step();
+                                steps();
+                                updPrev(null);
                                 break;
                             default:
-                                step();
+                                steps();
                                 break;
                         }
                         #endregion
@@ -543,6 +550,7 @@ namespace Antiplagiat
             Action<char?> updPrev = chr => { prev = chr; };
             Action<int> updState = st => { state = st; };
             Action step = () => { if (prev.HasValue) put(prev.Value); updPrev(current); };
+            Action steps = () => { if (prev.HasValue) put('s'); updPrev(current); };
             Action finite_state_machine_body = () =>
             {
                 switch (state)
@@ -585,12 +593,12 @@ namespace Antiplagiat
                         if (current == quote)
                         {
                             updState(3);//open q2
-                            step();
+                            steps();
                         }
                         else
                         {
                             updState(4);//continue q1
-                            step();
+                            steps();
                         }
                         #endregion
                         break;
@@ -600,18 +608,19 @@ namespace Antiplagiat
                         {
                             if (prev.HasValue && prev == '\\')
                             {
-                                step();
+                                steps();
                             }
                             else
                             {
                                 //close string
                                 updState(0);
-                                step();
+                                steps();
+                                updPrev(null);
                             }
                         }
                         else
                         {
-                            step();
+                            steps();
                         }
                         break;
                     case 3:
@@ -620,12 +629,13 @@ namespace Antiplagiat
                         {
                             //continue q3
                             updState(5);
-                            step();
+                            steps();
                         }
                         else
                         {
                             updState(0);
-                            step();
+                            steps();
+                            updPrev(null);
                         }
                         break;
                     case 5:
@@ -635,23 +645,23 @@ namespace Antiplagiat
                             if (!prev.HasValue || prev != '\\')
                             {
                                 updState(6); //close q1
-                                step();
+                                steps();
                             }
-                            else { step(); }
+                            else { steps(); }
                         }
-                        else { step(); }
+                        else { steps(); }
                         break;
                     case 6:
                         //close q1
                         if (current == quote)
                         {
                             updState(7); //close q2
-                            step();
+                            steps();
                         }
                         else
                         {
                             updState(5); //continue q3
-                            step();
+                            steps();
                         }
                         break;
                     case 7:
@@ -659,12 +669,13 @@ namespace Antiplagiat
                         if (current == quote)
                         {
                             updState(0);
-                            step();
+                            steps();
+                            updPrev(null);
                         }
                         else
                         {
                             updState(5);
-                            step();
+                            steps();
                         }
                         break;
                     #endregion
@@ -691,22 +702,57 @@ namespace Antiplagiat
             content = new string(result.Take(resultLength).ToArray());
         }
 
+        //cpp c java
+        private void RemoveCharJAVA()
+        {
+            Regex r = new Regex(@"'(\')?[^']*'");
+            content = r.Replace(content, "c");
+        }
+
 		private void RemoveShitCPLUSPLUS()
 		{
             //remove comments
             RemoveCommentJAVA();  //not supported R "delimeter(*raw symbols)delimeter"
+
+            RemoveCharJAVA();
+
+            List<string> sw = new List<string> { "array", "deque", "forward_list", "list", "map", "queue", "set", "stack", "unordered_map", "unordered_set", "vector"};
+
+            RemoveTriangleBreakets(sw, "tt");
+
+            sw = new List<string> { "template" };
+
+            RemoveTriangleBreakets(sw, "");
+
+            RemoveEmptyStrings();
         }
 
         private void RemoveShitJAVA()
         {
             //remove comments
             RemoveCommentJAVA(); //similar to cplusplus
+
+            RemoveCharJAVA();
+
+            List<string> sw = new List<string> { "Queue", "Iterable", "Collection", "List", "ArrayList", "LinkedList", "ArrayDeque", "Deque", "Set", "HashSet", "LinkedHashSet", "TreeSet", "SortedSet", "Comparable", "Comparator", "Map", "HashMap", "LinkedHashMap", "TreeMap", "WeakHashMap", "SortedMap" };
+
+            RemoveTriangleBreakets(sw, "tt");
+
+            RemoveEmptyStrings();
         }
 
         private void RemoveShitCSHARP()
         {
             //remove comments
             RemoveCommentCSHARP(); //similar to cplusplus
+
+            RemoveCharJAVA();
+
+            List<string> sw = new List<string> { "Dictionary", "List", "Queue", "SortedList", "Stack", "ArrayList", "Hashtable" };
+
+            RemoveTriangleBreakets(sw, "tt");
+
+            RemoveEmptyStrings();
         }
 
         //rm cpp c cs java
@@ -714,6 +760,8 @@ namespace Antiplagiat
         {
             //remove comments
             RemoveCommentPASCAL();
+
+            RemoveEmptyStrings();
         }
 
         //rm cpp c cs java
@@ -765,6 +813,39 @@ namespace Antiplagiat
                     return "\n{" + m.Groups[1].ToString().Replace("\n\t", "\n") + "\n}";
                 }));
             } while (old != content);
+        }
+
+        private void RemoveTriangleBreakets(List <string> stopwords, string replaced)
+        {
+            List<string> matches = new List<string>();
+            foreach (var sw in stopwords)
+            {
+                int start = 0;
+                Regex f = new Regex(@"[^_a-zA-Z](" + sw + @")\s*<");
+                while(f.IsMatch(content, start))
+                {
+                    var match = f.Match(content, start);
+                    start = content.IndexOf(match.ToString());
+                    int balance = 1;
+                    int pos = start + match.Length;
+                    while (balance > 0 && pos < content.Length)
+                    {
+                        switch (content[pos])
+                        {
+                            case '<':
+                                balance++;
+                                break;
+                            case '>':
+                                balance--;
+                                break;
+		                    default:
+                                break;
+                        }
+                        pos++;
+                    }
+                    content = content.Remove(start + 1, pos - start - 1).Insert(start + 1, replaced);
+                }
+            }
         }
 
 		public void removeShit()
