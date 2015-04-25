@@ -724,6 +724,15 @@ namespace Antiplagiat
 
             RemoveTriangleBreakets(sw, "");
 
+            //
+            //#include
+            Regex r = new Regex(@"[^\n]*#include[^\n]*");
+            content = r.Replace(content, "");
+            //using
+            r = new Regex(@"[^\n]*using[^\n]*");
+            content = r.Replace(content, "");
+            //
+
             RemoveEmptyStrings();
         }
 
@@ -737,8 +746,16 @@ namespace Antiplagiat
             List<string> sw = new List<string> { "Queue", "Iterable", "Collection", "List", "ArrayList", "LinkedList", "ArrayDeque", "Deque", "Set", "HashSet", "LinkedHashSet", "TreeSet", "SortedSet", "Comparable", "Comparator", "Map", "HashMap", "LinkedHashMap", "TreeMap", "WeakHashMap", "SortedMap" };
 
             RemoveTriangleBreakets(sw, "tt");
-
+            //#include
+            Regex r = new Regex(@"[^\n]*import[^\n]*");
+            content = r.Replace(content, "");
+            //using
+            r = new Regex(@"[^\n]*using[^\n]*");
+            content = r.Replace(content, "");
+            //
             RemoveEmptyStrings();
+
+            
         }
 
         private void RemoveShitCSHARP()
@@ -752,6 +769,14 @@ namespace Antiplagiat
 
             RemoveTriangleBreakets(sw, "tt");
 
+            //#include
+            Regex r = new Regex(@"[^\n]*import[^\n]*");
+            content = r.Replace(content, "");
+            //using
+            r = new Regex(@"[^\n]*using[^\n]*");
+            content = r.Replace(content, "");
+            //
+
             RemoveEmptyStrings();
         }
 
@@ -761,6 +786,17 @@ namespace Antiplagiat
             //remove comments
             RemoveCommentPASCAL();
 
+            //#include
+            Regex r = new Regex(@"[^\n]*uses[^\n]*");
+            content = r.Replace(content, "");
+            //using
+            r = new Regex(@"[^\n]*using[^\n]*");
+            content = r.Replace(content, "");
+            //
+            r = new Regex(@"[^\n]*begin[^\n]*");
+            content = r.Replace(content, "{");
+            r = new Regex(@"[^\n]*end[^\n]*");
+            content = r.Replace(content, "}");
             RemoveEmptyStrings();
         }
 
@@ -799,6 +835,8 @@ namespace Antiplagiat
             content = r.Replace(content, "\n");
             r = new Regex(@"\n\n+");
             content = r.Replace(content, "\n");
+            r = new Regex(@"[\s\n\t\r\n]+");
+            content = r.Replace(content, " ");
         }
 
         private void MakeBlocksPYTHON()
